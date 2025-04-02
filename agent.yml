@@ -1,0 +1,28 @@
+agent: "{% include 'system_prompt.md' %}" # load from file
+version: 1.0.0
+requires: ">=1.5.1"
+
+using:
+  - time
+  - task
+
+defaults:
+  query: "What is the capital of France?"
+
+task: >
+  {{ query }}
+
+mcp:
+  brave_search:
+    command: npx
+    args: ["-y", "@modelcontextprotocol/server-brave-search"]
+    env:
+      BRAVE_API_KEY: "" # will be read from the environment variables
+
+  fetch:
+    command: docker
+    args: ["run", "-i", "--rm", "mcp/fetch"]
+
+  filesystem:
+    command: npx
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "."]
